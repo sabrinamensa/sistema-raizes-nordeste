@@ -1,0 +1,10 @@
+﻿node_modules/
+dist/
+.env
+*.db
+*.backup
+*.backup.db
+*.sqlite
+*.sqlite3
+criar-usuario-teste.ts
+src/server.backup*

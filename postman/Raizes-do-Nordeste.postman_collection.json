@@ -1,0 +1,241 @@
+
+{
+  "info": {
+    "name": "Sistema Raízes do Nordeste",
+    "description": "Coleção de requisições para demonstrar a API REST.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "T01 - Login do gerente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"{{emailGerente}}\",\"senha\":\"{{senhaGerente}}\"}"
+            },
+            "url": "{{baseUrl}}/auth/login",
+            "description": "Esperado: 200 com token JWT. Configure as variáveis de credenciais localmente."
+          }
+        },
+        {
+          "name": "T02 - Login com senha incorreta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\":\"{{emailGerente}}\",\"senha\":\"senha-incorreta\"}"
+            },
+            "url": "{{baseUrl}}/auth/login",
+            "description": "Esperado: 401."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Produtos",
+      "item": [
+        {
+          "name": "T03 - Listar produtos",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/produtos",
+            "description": "Esperado: 200 com lista de produtos."
+          }
+        },
+        {
+          "name": "T04 - Cadastrar produto como gerente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenGerente}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nome\":\"Produto de teste Postman\",\"preco\":15.5,\"categoria\":\"TESTE\"}"
+            },
+            "url": "{{baseUrl}}/produtos",
+            "description": "Requer token de gerente. Esta requisição cria um produto no banco."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pedidos",
+      "item": [
+        {
+          "name": "T05 - Listar pedidos",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/pedidos",
+            "description": "Esperado: 200."
+          }
+        },
+        {
+          "name": "T06 - Criar pedido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"itens\":[{\"produto_id\":{{produtoId}},\"quantidade\":1}]}"
+            },
+            "url": "{{baseUrl}}/pedidos",
+            "description": "Esperado: 201 se o produto existir. Configure produtoId com um ID válido."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pagamento",
+      "item": [
+        {
+          "name": "T07 - Pagamento aprovado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"resultado\":\"APROVADO\"}"
+            },
+            "url": "{{baseUrl}}/pedidos/{{pedidoId}}/pagar",
+            "description": "Esperado: 200 para pedido pendente com estoque suficiente. O estoque será reduzido."
+          }
+        },
+        {
+          "name": "T08 - Pagamento recusado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"resultado\":\"RECUSADO\"}"
+            },
+            "url": "{{baseUrl}}/pedidos/{{pedidoId}}/pagar",
+            "description": "Esperado: 402 para pedido pendente. O pedido permanece PENDENTE."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Erros",
+      "item": [
+        {
+          "name": "T09 - Estoque sem token",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/estoque",
+            "description": "Esperado: 401."
+          }
+        },
+        {
+          "name": "T10 - Pedido sem itens",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"itens\":[]}"
+            },
+            "url": "{{baseUrl}}/pedidos",
+            "description": "Esperado: 400."
+          }
+        },
+        {
+          "name": "T11 - Pedido com produto inexistente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"itens\":[{\"produto_id\":999999,\"quantidade\":1}]}"
+            },
+            "url": "{{baseUrl}}/pedidos",
+            "description": "Esperado: 404."
+          }
+        },
+        {
+          "name": "T12 - Relatório sem token",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/relatorios/vendas",
+            "description": "Esperado: 401."
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "emailGerente",
+      "value": ""
+    },
+    {
+      "key": "senhaGerente",
+      "value": ""
+    },
+    {
+      "key": "tokenGerente",
+      "value": ""
+    },
+    {
+      "key": "produtoId",
+      "value": "1"
+    },
+    {
+      "key": "pedidoId",
+      "value": ""
+    }
+  ]
+}
