@@ -40,3 +40,18 @@ Os testes dependem de dados previamente cadastrados, e alguns criam pedidos no b
 ## Observações
 
 O pagamento é simulado. O projeto foi desenvolvido para fins educacionais e ainda possui funcionalidades complementares pendentes.
+
+## Documentação da API — Swagger
+
+O projeto disponibiliza documentação interativa dos endpoints utilizando Swagger UI e OpenAPI 3.0.
+
+Para acessar:
+
+1. Instale as dependências com `npm install`.
+2. Compile o projeto com `npx tsc`.
+3. Inicie o servidor com `node dist/server.js`.
+4. Abra no navegador: http://localhost:3000/api-docs
+
+A documentação apresenta as rotas de autenticação, produtos, estoque, pedidos, pagamentos simulados e relatórios.
+
+**Observação:** o Swagger funciona localmente, com o servidor em execução.
